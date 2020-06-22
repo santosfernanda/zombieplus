@@ -1,22 +1,26 @@
 pipeline {
     agent {
-        docker {
-            image "papitoio/node-wd"
+        docker { 
+            image "papitoio/nodewd"
             args "--network=skynet"
         }
     }
-    stages{
+    stages {
         stage('Build') {
             steps {
                 sh "npm install"
             }
+            
         }
         stage('Tests') {
             steps {
                 sh "npm run test:ci"
-                junit testResults:""
             }
-            
+            post {
+                always {
+                    junit testDataPublishers:[[$class: 'AttachmentPublisher']], testResults: "tests_output/**/*.xml"
+                }
+            }
         }
     }
 }
