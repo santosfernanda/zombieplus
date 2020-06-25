@@ -17,6 +17,11 @@ pipeline {
                  junit testResults:"tests_output/**/*.xml"  
           
             } 
+            post{
+                always{
+                    junit testResults:"tests_output/**/*.xml"  
+                }
+            }
         }     
           
         
